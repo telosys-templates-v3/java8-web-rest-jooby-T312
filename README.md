@@ -5,6 +5,8 @@ with CRUD operations (Create, Read, Update, Delete) .
 
 This bundle generates code for [Jooby](https://jooby.io/) web framework
 
+## Bundle for Telosys ver 3.1.2
+
 ## Requirements
 
 - Java 8
