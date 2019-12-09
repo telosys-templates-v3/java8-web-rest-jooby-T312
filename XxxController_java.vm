@@ -112,19 +112,6 @@ public class ${entity.name}Controller extends AbstractResourceController {
 	 */
 	@GET
 	@Path("${pkPath}")
-/**
-	@Produces({MediaType.APPLICATION_JSON})
-	public Response getById(${pkPathVariables}) {
-		log("findById("+${pkPlus}+")...");
-		${entityClass} record = ${uncapitalizedEntityName}Service.findById(${pkElementsVariables});
-		if ( record != null ) {
-			return Response.ok(record).build();
-		}
-		else {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-	}
-**/
 	public Result getOneById(${pkPathVariables}) { // method param name = Path annotation name  
 		// if invalid parameter (e.g. not a number) : status 400 returned by Jooby
 		log(">>> GET : findById("+${pkPlus}+")...");
@@ -147,22 +134,6 @@ public class ${entity.name}Controller extends AbstractResourceController {
 	 * @return 201 with body if created, 409 conflict if duplicate key 
 	 */	
 	@POST
-/**
-	@Consumes({MediaType.APPLICATION_JSON})
-	@Produces({MediaType.APPLICATION_JSON})
-	public Response create(${entityClass} ${uncapitalizedEntityName}) {
-		log("create()...");
-		if ( ${uncapitalizedEntityName}Service.exists(${uncapitalizedEntityName}) ) {
-			log("create() : already exists -> conflict");
-			return Response.status(Status.CONFLICT).build();
-		}
-		else {
-			log("create() : doesn't exist -> create");
-			${entityClass} record = ${uncapitalizedEntityName}Service.create(${uncapitalizedEntityName});
-			return Response.status(Status.CREATED).entity(record).build();
-		}
-	}
-**/
 	public Result create(@Body ${entityClass} ${uncapitalizedEntityName}) {
 		log(">>> POST : create() : " + ${uncapitalizedEntityName});
 		if ( ${uncapitalizedEntityName}Service.exists(${uncapitalizedEntityName}) ) {
@@ -186,26 +157,6 @@ public class ${entity.name}Controller extends AbstractResourceController {
 	 */	
 	@PUT
 	@Path("${pkPath}")
-/**
-	@Consumes({MediaType.APPLICATION_JSON})
-	@Produces({MediaType.APPLICATION_JSON})
-	public Response update(${entityClass} ${uncapitalizedEntityName}, ${pkPathVariables}) {
-		log("update()...");
-		// force the id (use the id provided by the URL)
-#foreach( $attribute in $entity.keyAttributes )
-		${uncapitalizedEntityName}.${attribute.setter}( $attribute.name );
-#end
-		boolean updated = ${uncapitalizedEntityName}Service.update(${uncapitalizedEntityName});
-		if ( updated ) {
-			// Actually updated (found and updated) => 200 OK
-			return Response.status(Status.OK).build();
-		}
-		else {
-			// Not updated with no error => 404 not found
-			return Response.status(Status.NOT_FOUND).build();
-		}
-	}
-**/
 	public Result update(@Body ${entityClass} ${uncapitalizedEntityName}, ${pkPathVariables}) {
 		log(">>> PUT : update() " );
 		// force the id (use the id provided by the URL)
@@ -231,20 +182,6 @@ public class ${entity.name}Controller extends AbstractResourceController {
 	 * @return 200 if found and updated, 201 if not found and created
 	 */	
 	@PUT
-/**
-	@Consumes({MediaType.APPLICATION_JSON})
-	@Produces({MediaType.APPLICATION_JSON})
-	public Response save(${entityClass} ${uncapitalizedEntityName}) {
-		log("save()...");
-		Status status = Status.OK ; // 200 OK
-		if ( ! ${uncapitalizedEntityName}Service.exists(${uncapitalizedEntityName}) ) {
-			status = Status.CREATED ; // 201 CREATED
-		}
-		${entityClass} record = ${uncapitalizedEntityName}Service.save(${uncapitalizedEntityName});
-		// Response ( code 200 or 201 )
-		return Response.status(status).entity(record).build();
-	}
-**/
 	public Result save(@Body ${entityClass} ${uncapitalizedEntityName}) {
 		log(">>> PUT : save() : " + ${uncapitalizedEntityName});
 		Status status = Status.OK ; // 200 OK
@@ -265,23 +202,6 @@ public class ${entity.name}Controller extends AbstractResourceController {
 	 */
 	@DELETE
 	@Path("${pkPath}")
-/**
-	//@Consumes({MediaType.APPLICATION_JSON})
-	// public void delete(${pkPathVariables}) {
-	public Response delete(${pkPathVariables}) {
-		log("delete("+${pkPlus}+")...");
-		// ${uncapitalizedEntityName}Service.deleteById(${pkArgs});
-		boolean deleted = ${uncapitalizedEntityName}Service.deleteById(${pkArgs});
-		if ( deleted ) {
-			// Actually deleted (found and deleted) => 204 "No Content" because no body in the response 
-			return Response.status(Status.NO_CONTENT).build();
-		}
-		else {
-			// Not deleted with no error => 404 "Not found"
-			return Response.status(Status.NOT_FOUND).build();
-		}
-	}
-**/
 	public Result delete(${pkPathVariables}) {
 		log(">>> DELETE : delete(" + ${pkPlus} + ")...");
 		boolean deleted = ${uncapitalizedEntityName}Service.deleteById(${pkArgs});
@@ -295,21 +215,6 @@ public class ${entity.name}Controller extends AbstractResourceController {
 		}
 	}
 
-
-/**
-	@GET
-	@Path("/${uncapitalizedEntityName}s-list-items")
-	@Produces({MediaType.APPLICATION_JSON})
-	public List<${entityListItemClass}> listItems() {
-		log("listItems()...");
-		List<${entityClass}> list = ${uncapitalizedEntityName}Service.findAll();
-		List<${entityListItemClass}> items = new LinkedList<${entityListItemClass}>();
-		for ( ${entityClass} ${uncapitalizedEntityName} : list ) {
-			items.add(new ${entityListItemClass}( ${uncapitalizedEntityName} ) );
-		}
-		return items;
-	}
-**/
 	/**
 	 * Get all entities in "list-item" format
 	 * @return 
